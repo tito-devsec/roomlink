@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RoomLink · Service Fees</title>
+<style>
+  :root{
+    --bg:#06091A; --panel:#0D1230; --panel-2:#141840; --line:rgba(255,255,255,.08);
+    --cyan:#00C8FF; --blue:#1A3BE8; --purple:#6B3BF0;
+    --text:#fff; --muted:#8A9EC4; --faint:#3D5075;
+    --ok:#00E5A0; --warn:#FFB347; --err:#FF4D6A;
+    --mono:'SF Mono',ui-monospace,'Roboto Mono',Menlo,monospace;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:
+      radial-gradient(900px 500px at 85% -10%, rgba(107,59,240,.18), transparent 60%),
+      radial-gradient(800px 500px at 0% 0%, rgba(0,200,255,.12), transparent 55%),
+      var(--bg);
+    color:var(--text);font-family:var(--sans);min-height:100vh;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1100px;margin:0 auto;padding:40px 28px 80px}
+  header{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:34px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--cyan),var(--blue) 55%,var(--purple));display:grid;place-items:center;font-weight:800;font-size:19px;box-shadow:0 8px 30px rgba(0,200,255,.35)}
+  .brand h1{font-size:19px;margin:0;letter-spacing:-.2px}
+  .brand p{margin:2px 0 0;color:var(--muted);font-size:13px}
+  .right{display:flex;align-items:center;gap:14px}
+  .live{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted)}
+  .live .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);animation:pp 1.8s infinite}
+  @keyframes pp{0%{box-shadow:0 0 0 0 rgba(0,229,160,.5)}70%{box-shadow:0 0 0 8px rgba(0,229,160,0)}100%{box-shadow:0 0 0 0 rgba(0,229,160,0)}}
+  button{font-family:inherit;cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--text);padding:9px 15px;border-radius:10px;font-size:13px;font-weight:600;transition:.15s}
+  button:hover{border-color:var(--cyan);color:var(--cyan)}
+  .hero{background:linear-gradient(120deg,rgba(0,200,255,.10),rgba(107,59,240,.10));border:1px solid var(--line);border-radius:20px;padding:26px 28px;margin-bottom:26px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,255,.25),transparent 70%)}
+  .hero .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
+  .hero .total{font-size:46px;font-weight:800;letter-spacing:-1.5px;line-height:1}
+  .hero .total small{font-size:20px;font-weight:600;color:var(--muted);margin-right:8px}
+  .hero .since{color:var(--muted);font-size:13px;margin-top:8px}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:30px}
+  @media(max-width:720px){.cards{grid-template-columns:repeat(2,1fr)}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:16px 18px}
+  .card .k{font-size:12px;color:var(--muted);margin-bottom:8px}
+  .card .v{font-size:24px;font-weight:700;letter-spacing:-.5px}
+  .card .v.ok{color:var(--ok)} .card .v.warn{color:var(--warn)} .card .v.err{color:var(--err)}
+  .tablewrap{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .thead{display:grid;grid-template-columns:1.3fr 1fr 1fr .9fr 1fr;gap:10px;padding:14px 20px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--faint);border-bottom:1px solid var(--line);font-family:var(--mono)}
+  .rowx{display:grid;grid-template-columns:1.3fr 1fr 1fr .9fr 1fr;gap:10px;padding:15px 20px;border-bottom:1px solid var(--line);align-items:center;font-size:14px}
+  .rowx:last-child{border-bottom:none}
+  .rowx:hover{background:var(--panel-2)}
+  .pid{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .amt{font-weight:700}
+  .net{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
+  .net i{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:999px;font-size:12px;font-weight:600}
+  .pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+  .pill.completed{color:var(--ok);background:rgba(0,229,160,.10)}
+  .pill.pending{color:var(--warn);background:rgba(255,179,71,.10)}
+  .pill.failed,.pill.cancelled{color:var(--err);background:rgba(255,77,106,.10)}
+  .when{color:var(--faint);font-size:12.5px}
+  .empty{padding:60px 20px;text-align:center;color:var(--muted)}
+  .empty b{display:block;color:var(--text);font-size:16px;margin-bottom:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><div class="logo">R</div><div><h1>Service fees</h1><p>One-time booking fee — 40% of one month's rent</p></div></div>
+    <div class="right"><span class="live"><span class="dot"></span><span id="liveLabel">live</span></span><button id="refresh">Refresh</button></div>
+  </header>
+  <section class="hero">
+    <div class="eyebrow">Collected fees</div>
+    <div class="total"><small>TZS</small><span id="heroTotal">0</span></div>
+    <div class="since" id="heroSince">No completed payments yet</div>
+  </section>
+  <section class="cards">
+    <div class="card"><div class="k">Completed</div><div class="v ok" id="cCompleted">0</div></div>
+    <div class="card"><div class="k">Awaiting PIN</div><div class="v warn" id="cPending">0</div></div>
+    <div class="card"><div class="k">Failed</div><div class="v err" id="cFailed">0</div></div>
+    <div class="card"><div class="k">Success rate</div><div class="v" id="cRate">—</div></div>
+  </section>
+  <section class="tablewrap">
+    <div class="thead"><span>Payment</span><span>Booking</span><span>Amount</span><span>Network</span><span>Status</span></div>
+    <div id="rows"><div class="empty"><b>Nothing yet</b>Payments will appear here the moment a student pays a fee.</div></div>
+  </section>
+</div>
+<script>
+  // When served by the nginx proxy, the API is same-origin under /api.
+  // When opened directly as a file:// during local dev, hit localhost:4000.
+  const API = (location.protocol === 'file:') ? 'http://localhost:4000' : '';
+  const NET = { mpesa:['M-Pesa','#E30613'], tigo:['Mixx by Yas','#0033A0'], airtel:['Airtel Money','#ED1C24'], halopesa:['HaloPesa','#F7941E'] };
+  const tzs = n => Number(n||0).toLocaleString('en-US');
+  function ago(iso){ if(!iso) return ''; const s = Math.floor((Date.now()-new Date(iso).getTime())/1000); if(s<60) return s+'s ago'; if(s<3600) return Math.floor(s/60)+'m ago'; if(s<86400) return Math.floor(s/3600)+'h ago'; return Math.floor(s/86400)+'d ago'; }
+  function render(payments){
+    const done = payments.filter(p=>p.status==='completed');
+    const pend = payments.filter(p=>p.status==='pending');
+    const fail = payments.filter(p=>p.status==='failed'||p.status==='cancelled');
+    const revenue = done.reduce((s,p)=>s+Number(p.amount||0),0);
+    heroTotal.textContent = tzs(revenue);
+    heroSince.textContent = done.length ? `from ${done.length} completed payment${done.length>1?'s':''}` : 'No completed payments yet';
+    cCompleted.textContent = done.length; cPending.textContent = pend.length; cFailed.textContent = fail.length;
+    const settled = done.length + fail.length;
+    cRate.textContent = settled ? Math.round(done.length/settled*100)+'%' : '—';
+    if(!payments.length){ rows.innerHTML = '<div class="empty"><b>Nothing yet</b>Payments will appear here the moment a student pays a fee.</div>'; return; }
+    rows.innerHTML = payments.map(p=>{
+      const [label,color] = NET[p.network] || [p.network||'—','#888'];
+      return `<div class="rowx"><div><div class="pid">${p.id}</div><div class="when">${ago(p.created_at)}</div></div>
+        <div class="pid">${p.booking_id ?? p.bookingId ?? '—'}</div><div class="amt">TZS ${tzs(p.amount)}</div>
+        <div class="net"><i style="background:${color}"></i>${label}</div><div><span class="pill ${p.status}">${p.status}</span></div></div>`;
+    }).join('');
+  }
+  async function load(){ try{ const r = await fetch(API+'/api/payments'); const { payments=[] } = await r.json(); render(payments); liveLabel.textContent='live'; }catch(e){ liveLabel.textContent='offline — start the backend'; } }
+  document.getElementById('refresh').onclick = load; load(); setInterval(load, 4000);
+</script>
+</body>
+</html>

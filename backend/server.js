@@ -1,0 +1,11 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const payments = require('./routes/payments');
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.get('/health', (_req, res) => res.json({ ok: true, provider: process.env.PAYMENT_PROVIDER || 'mock' }));
+app.use('/api/payments', payments);
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => console.log(`RoomLink payments on :${PORT} (provider: ${process.env.PAYMENT_PROVIDER || 'mock'})`));

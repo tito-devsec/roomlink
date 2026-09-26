@@ -1,0 +1,83 @@
+{
+  "expo": {
+    "name": "RoomLink",
+    "slug": "roomlink",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/roomlink-logo.png",
+    "scheme": "roomlink",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/roomlink-logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1A3BE8"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.roomlink.app",
+      "config": {
+        "googleMapsApiKey": "AIzaSyDLTgBBe0Pe-zzKWKt18-tVB60Lf8qEoMA"
+      },
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "RoomLink needs your location to find nearby hostels.",
+        "NSLocationAlwaysUsageDescription": "RoomLink uses your location to show nearby hostels.",
+        "NSMicrophoneUsageDescription": "RoomLink needs microphone access for voice notes.",
+        "NSPhotoLibraryUsageDescription": "RoomLink needs photo access for your profile and sharing.",
+        "NSCameraUsageDescription": "RoomLink needs camera access for student ID verification."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/roomlink-logo.png",
+        "backgroundColor": "#06091A"
+      },
+      "package": "com.roomlink.app",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDLTgBBe0Pe-zzKWKt18-tVB60Lf8qEoMA"
+        }
+      },
+      "permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.CAMERA"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/roomlink-logo.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow RoomLink to access your location to find nearby hostels."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow RoomLink to access your photos for student ID verification and profile.",
+          "cameraPermission": "Allow RoomLink camera access for student ID photos."
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "newArchEnabled": true,
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "46ede916-7450-41d8-87ab-91a187e0c81b"
+      }
+    },
+    "owner": "titocode"
+  }
+}

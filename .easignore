@@ -1,0 +1,16 @@
+# Left out of EAS Build uploads (this folder has no git repo, so EAS reads this
+# file instead of .gitignore). .env stays in: it only holds public EXPO_PUBLIC_ values.
+node_modules/
+.expo/
+dist/
+web-build/
+android/
+ios/
+*.log
+
+# Separate services, not part of the mobile app.
+backend/
+admin/
+deploy/
+docker-compose.yml
+.env.docker.example

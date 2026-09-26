@@ -1,0 +1,66 @@
+# RoomLink — Docker Compose
+# Services:
+#   db    : MySQL (payments storage for the backend)
+#   api   : Node payment backend (Express)
+#   web   : nginx — serves the admin dashboard and reverse-proxies /api -> api
+#
+# The mobile app is NOT here — it ships to the app stores via EAS (see DEPLOYMENT.md).
+# Supabase is a managed service you connect to from the app; it is not containerised here.
+
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-roomlink}
+      MYSQL_USER: ${DB_USER:-roomlink}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-roomlink}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpass}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${DB_ROOT_PASSWORD:-rootpass}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [roomlink]
+
+  api:
+    build: ./backend
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PORT: 4000
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: ${DB_USER:-roomlink}
+      DB_PASSWORD: ${DB_PASSWORD:-roomlink}
+      DB_NAME: ${DB_NAME:-roomlink}
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "4000"
+    networks: [roomlink]
+
+  web:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "80:80"
+      # - "443:443"   # enable after adding TLS certs (see DEPLOYMENT.md)
+    volumes:
+      - ./deploy/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./admin:/usr/share/nginx/html:ro
+      # - ./deploy/certs:/etc/nginx/certs:ro   # for TLS
+    networks: [roomlink]
+
+volumes:
+  db_data:
+
+networks:
+  roomlink:
+    driver: bridge
