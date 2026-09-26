@@ -66,7 +66,8 @@
           "photosPermission": "Allow RoomLink to access your photos for student ID verification and profile.",
           "cameraPermission": "Allow RoomLink camera access for student ID photos."
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
