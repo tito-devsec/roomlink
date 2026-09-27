@@ -1,13 +1,16 @@
 // Test sign-in: any email + password opens a local test session for the role
-// picked on the login screen, without Clerk. On in development and in test APKs
-// (eas.json's "preview" profile sets EXPO_PUBLIC_TEST_LOGIN); production builds
-// never set it, so it never ships to real users.
+// picked on the login screen, without Clerk. On in development and in test APKs:
+// the "preview" build profile sets EXPO_PUBLIC_TEST_LOGIN and uses the "preview"
+// update channel, so over-the-air updates to test APKs keep it on too.
+// Production builds and their channel never enable it.
 
 import { useSyncExternalStore } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Updates from 'expo-updates';
 import type { Role } from './role';
 
-export const DEMO_LOGIN_ENABLED = __DEV__ || process.env.EXPO_PUBLIC_TEST_LOGIN === '1';
+export const DEMO_LOGIN_ENABLED =
+  __DEV__ || process.env.EXPO_PUBLIC_TEST_LOGIN === '1' || Updates.channel === 'preview';
 
 export interface DemoSession {
   email: string;

@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import {
-  View, StyleSheet, ScrollView, Pressable,
-  Alert, Image, KeyboardAvoidingView, Platform,
+  View, StyleSheet, ScrollView, Pressable, Alert, Image,
 } from 'react-native';
 import { router } from 'expo-router';
 import { useUser } from '@clerk/clerk-expo';
 import * as ImagePicker from 'expo-image-picker';
 import { BorderWidth, Colors, Fonts, hardShadow, themed } from '../../constants/Colors';
-import { Chip, IconButton, NeoButton, NeoInput, ScreenHeader, Text } from '../../components/neo';
+import { Chip, IconButton, NeoButton, NeoInput, ScreenHeader, Text, KeyboardSafeView } from '../../components/neo';
 import UniversityPicker from '../../components/UniversityPicker';
 import { saveMyProfile, getMyProfile } from '../../services/profile';
 
@@ -81,7 +80,7 @@ export default function EditProfileScreen() {
         right={<NeoButton title={loading ? 'Saving…' : 'Save'} size="sm" onPress={handleSave} disabled={loading} />}
       />
 
-      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardSafeView style={styles.flex}>
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
           <View style={styles.avatarSection}>
             <Pressable onPress={pickAvatar} accessibilityRole="button" accessibilityLabel="Change photo">
@@ -166,7 +165,7 @@ export default function EditProfileScreen() {
             style={styles.bigSaveBtn}
           />
         </ScrollView>
-      </KeyboardAvoidingView>
+      </KeyboardSafeView>
     </View>
   );
 }

@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import {
-  View, StyleSheet, FlatList, TouchableOpacity, TextInput,
-  KeyboardAvoidingView, Platform, Modal, Image, Animated, Alert, Pressable,
-  ImageBackground, Linking, useWindowDimensions, type TextStyle,
+  View, StyleSheet, FlatList, TouchableOpacity, TextInput, Platform, Modal, Image,
+  Animated, Alert, Pressable, ImageBackground, Linking, useWindowDimensions,
+  type TextStyle,
 } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { useUser } from '@clerk/clerk-expo';
@@ -11,7 +11,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { BorderWidth, Colors, Fonts, colorFor, hardShadow, themed } from '../../constants/Colors';
 import { Config } from '../../constants/Config';
-import { Avatar, IconButton, NeoButton, Text, haptic, type IconName } from '../../components/neo';
+import {
+  Avatar, IconButton, NeoButton, Text, haptic, KeyboardSafeView, useKeyboardVisible, type IconName,
+} from '../../components/neo';
 import { supabase } from '../../services/supabase';
 import { getMyUniversityId } from '../../services/profile';
 import SwipeableMessage from '../../components/SwipeableMessage';
@@ -143,6 +145,7 @@ function MessageBubble({ msg, isOwn, isGroup, onReact, onReply, onLongPress }: {
 
 export default function ChatScreen() {
   const insets = useSafeAreaInsets();
+  const keyboardOpen = useKeyboardVisible();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { user } = useUser();
   const [allowed, setAllowed] = useState<boolean | null>(null);
@@ -374,7 +377,7 @@ export default function ChatScreen() {
         />
       )}
 
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <KeyboardSafeView>
         {replyTo && (
           <View style={styles.replyPreviewBar}>
             <View style={styles.replyPreviewBarBar} />
@@ -388,7 +391,7 @@ export default function ChatScreen() {
           </View>
         )}
 
-        <View style={[styles.inputBar, { paddingBottom: Math.max(insets.bottom, 10) }]}>
+        <View style={[styles.inputBar, { paddingBottom: keyboardOpen ? 10 : Math.max(insets.bottom, 10) }]}>
           <IconButton
             icon={attachMenuVisible ? 'close' : 'add'}
             size={44}
@@ -459,7 +462,7 @@ export default function ChatScreen() {
             ))}
           </View>
         )}
-      </KeyboardAvoidingView>
+      </KeyboardSafeView>
     </View>
   );
 }

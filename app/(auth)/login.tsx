@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import {
-  View, StyleSheet, ScrollView, Pressable,
-  Animated, KeyboardAvoidingView, Platform, Alert,
+  View, StyleSheet, ScrollView, Pressable, Animated, Alert,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSignIn, useOAuth, useClerk } from '@clerk/clerk-expo';
@@ -9,7 +8,7 @@ import { Icon } from '../../components/neo/Icon';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Linking from 'expo-linking';
 import { BorderWidth, Colors, Fonts, hardShadow, themed } from '../../constants/Colors';
-import { Checkbox, IconButton, NeoButton, NeoInput, Segmented, Tag, Text } from '../../components/neo';
+import { Checkbox, IconButton, NeoButton, NeoInput, Segmented, Tag, Text, KeyboardSafeView } from '../../components/neo';
 import {
   AuthBrand, ErrorBanner, OrDivider, RolePicker, SocialButtons, type OAuthProvider,
 } from '../../components/AuthParts';
@@ -130,7 +129,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardSafeView style={styles.container}>
       <ScrollView
         contentContainerStyle={[styles.scroll, { paddingTop: insets.top + 10, paddingBottom: insets.bottom + 32 }]}
         showsVerticalScrollIndicator={false}
@@ -226,7 +225,7 @@ export default function LoginScreen() {
         <OrDivider label="or continue with" />
         <SocialButtons onPress={handleOAuth} busy={socialLoading} />
       </ScrollView>
-    </KeyboardAvoidingView>
+    </KeyboardSafeView>
   );
 }
 

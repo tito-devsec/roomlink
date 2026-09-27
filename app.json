@@ -3,6 +3,12 @@
     "name": "RoomLink",
     "slug": "roomlink",
     "version": "1.0.0",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/46ede916-7450-41d8-87ab-91a187e0c81b"
+    },
     "orientation": "portrait",
     "icon": "./assets/images/roomlink-logo.png",
     "scheme": "roomlink",

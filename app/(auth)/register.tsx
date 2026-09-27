@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import {
-  View, StyleSheet, ScrollView, Pressable,
-  KeyboardAvoidingView, Platform, Alert,
+  View, StyleSheet, ScrollView, Pressable, Alert,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSignUp, useOAuth, useClerk } from '@clerk/clerk-expo';
@@ -10,8 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Linking from 'expo-linking';
 import { BorderWidth, Colors, Fonts, hardShadow, themed } from '../../constants/Colors';
 import {
-  Checkbox, Chip, IconButton, NeoButton, NeoInput, Segmented, Text,
-  type IconName,
+  Checkbox, Chip, IconButton, NeoButton, NeoInput, Segmented, Text, KeyboardSafeView, type IconName,
 } from '../../components/neo';
 import {
   AuthBrand, CaptchaSlot, ErrorBanner, OrDivider, SocialButtons, type OAuthProvider,
@@ -155,7 +153,7 @@ export default function RegisterScreen() {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardSafeView style={styles.container}>
       <ScrollView
         contentContainerStyle={[styles.scroll, { paddingTop: insets.top + 10, paddingBottom: insets.bottom + 32 }]}
         keyboardShouldPersistTaps="handled"
@@ -274,7 +272,7 @@ export default function RegisterScreen() {
         <OrDivider label="or sign up with" />
         <SocialButtons onPress={handleOAuth} />
       </ScrollView>
-    </KeyboardAvoidingView>
+    </KeyboardSafeView>
   );
 }
 

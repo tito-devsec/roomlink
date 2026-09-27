@@ -6,15 +6,15 @@
 
 import { useState, useRef, useEffect } from 'react';
 import {
-  View, StyleSheet, TextInput, Pressable, ScrollView,
-  KeyboardAvoidingView, Platform, ActivityIndicator, Alert, useWindowDimensions,
+  View, StyleSheet, TextInput, Pressable, ScrollView, ActivityIndicator, Alert,
+  useWindowDimensions,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSignUp, useClerk } from '@clerk/clerk-expo';
 import { Icon } from '../../components/neo/Icon';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BorderWidth, Colors, Fonts, hardShadow, themed } from '../../constants/Colors';
-import { IconButton, NeoButton, Text } from '../../components/neo';
+import { IconButton, NeoButton, Text, KeyboardSafeView } from '../../components/neo';
 import { resolveRole } from '../../services/role';
 
 const CODE_LENGTH = 6;
@@ -108,7 +108,7 @@ export default function VerifyEmailScreen() {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardSafeView style={styles.container}>
       <ScrollView
         contentContainerStyle={[styles.content, { paddingTop: insets.top + 10, paddingBottom: insets.bottom + 32 }]}
         keyboardShouldPersistTaps="handled"
@@ -168,7 +168,7 @@ export default function VerifyEmailScreen() {
           </Text>
         </Pressable>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </KeyboardSafeView>
   );
 }
 

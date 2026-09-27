@@ -13,6 +13,7 @@ import { communityThreadId } from '../../services/chat';
 import { clearRole } from '../../services/role';
 import { endDemoSession, useDemoSession } from '../../services/demoAuth';
 import { setThemeMode, useThemeMode } from '../../services/theme';
+import { updateLabel } from '../../services/updates';
 
 interface RowProps {
   icon: IconName;
@@ -239,6 +240,7 @@ export default function ProfileScreen() {
             <Text style={styles.appVersion}>in Tanzania</Text>
           </View>
           <Text style={styles.appVersion}>Icons: Uicons by Flaticon</Text>
+          <Text style={styles.appVersion}>Build: {updateLabel()}</Text>
         </View>
       </View>
     </ScrollView>

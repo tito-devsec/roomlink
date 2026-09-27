@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import {
-  View, StyleSheet, ScrollView, Pressable,
-  KeyboardAvoidingView, Platform, Alert,
+  View, StyleSheet, ScrollView, Pressable, Alert,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSignUp } from '@clerk/clerk-expo';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BorderWidth, Colors, Fonts, themed } from '../../constants/Colors';
-import { Checkbox, NeoButton, NeoInput, ScreenHeader, Tag, Text, type IconName } from '../../components/neo';
+import { Checkbox, NeoButton, NeoInput, ScreenHeader, Tag, Text, KeyboardSafeView, type IconName } from '../../components/neo';
 import { CaptchaSlot, ErrorBanner } from '../../components/AuthParts';
 import { roleMetadata, setRole } from '../../services/role';
 
@@ -85,7 +84,7 @@ export default function LandlordRegisterScreen() {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardSafeView style={styles.container}>
       <ScreenHeader title="Landlord sign up" />
 
       <ScrollView
@@ -131,7 +130,7 @@ export default function LandlordRegisterScreen() {
           </Text>
         </Pressable>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </KeyboardSafeView>
   );
 }
 

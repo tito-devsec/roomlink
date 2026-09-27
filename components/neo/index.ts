@@ -6,6 +6,7 @@ export {
   type ButtonVariant,
 } from './controls';
 export { NeoInput } from './NeoInput';
+export { KeyboardSafeView, useKeyboardVisible } from './KeyboardSafeView';
 export {
   NeoCard, ScreenHeader, PageTitle, SectionHeader, EmptyState, Avatar, initialsOf,
   Logo, DashedLine, ProgressBar, StatTile, BottomSheet,

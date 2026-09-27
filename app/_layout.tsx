@@ -15,6 +15,7 @@ import { Colors, themed } from '../constants/Colors';
 import { IconFonts } from '../components/neo/Icon';
 import { DialogHost } from '../components/neo/Dialog';
 import { loadThemeMode, useThemeMode } from '../services/theme';
+import { useUpdatePrompt } from '../services/updates';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -32,6 +33,7 @@ const tokenCache = {
 function RootLayoutNav() {
   const { isLoaded } = useAuth();
   const mode = useThemeMode();
+  useUpdatePrompt();
   useEffect(() => {
     if (isLoaded) SplashScreen.hideAsync();
   }, [isLoaded]);

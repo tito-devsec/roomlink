@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, Image, Pressable,
+  View, StyleSheet, ScrollView, Alert, Image, Pressable,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Icon } from '../../components/neo/Icon';
@@ -8,7 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BorderWidth, Colors, hardShadow, themed } from '../../constants/Colors';
 import { computeServiceFee } from '../../constants/Config';
-import { Chip, NeoButton, NeoInput, ScreenHeader, Segmented, Text } from '../../components/neo';
+import { Chip, NeoButton, NeoInput, ScreenHeader, Segmented, Text, KeyboardSafeView } from '../../components/neo';
 
 const ROOM_TYPES = ['Single', 'Shared', 'Hostel'] as const;
 const GENDERS = ['Male', 'Female', 'Mixed'] as const;
@@ -52,7 +52,7 @@ export default function AddRoom() {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardSafeView style={styles.container}>
       <ScreenHeader title="Add a room" />
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
@@ -128,7 +128,7 @@ export default function AddRoom() {
       <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 12) + 8 }]}>
         <NeoButton title="Submit for review" variant="purple" size="lg" iconRight="send" onPress={submit} />
       </View>
-    </KeyboardAvoidingView>
+    </KeyboardSafeView>
   );
 }
 

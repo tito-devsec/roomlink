@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { View, StyleSheet, Pressable, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import { View, StyleSheet, Pressable, ScrollView, Alert } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSignIn, useClerk } from '@clerk/clerk-expo';
 import { Icon } from '../../components/neo/Icon';
 import { BorderWidth, Colors, Fonts, hardShadow, themed } from '../../constants/Colors';
-import { NeoButton, NeoInput, ScreenHeader, Text } from '../../components/neo';
+import { NeoButton, NeoInput, ScreenHeader, Text, KeyboardSafeView } from '../../components/neo';
 import { HOME, resolveRole } from '../../services/role';
 
 export default function ResetPasswordScreen() {
@@ -47,7 +47,7 @@ export default function ResetPasswordScreen() {
   const isCode = step === 'code';
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardSafeView style={styles.container}>
       <ScreenHeader title="Reset password" />
 
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
@@ -121,7 +121,7 @@ export default function ResetPasswordScreen() {
           <Text style={styles.backToLoginText}>Back to login</Text>
         </Pressable>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </KeyboardSafeView>
   );
 }
 

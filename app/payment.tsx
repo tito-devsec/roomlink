@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import {
-  View, StyleSheet, ScrollView, Pressable,
-  ActivityIndicator, KeyboardAvoidingView, Platform, Animated, Alert,
+  View, StyleSheet, ScrollView, Pressable, ActivityIndicator, Animated, Alert, Image,
+  type ImageSourcePropType,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Icon } from '../components/neo/Icon';
@@ -10,7 +10,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BorderWidth, Colors, Fonts, hardShadow, themed } from '../constants/Colors';
 import { Config, computeServiceFee, brokerEquivalent } from '../constants/Config';
 import {
-  DashedLine, NeoButton, NeoCard, NeoInput, NeoPressable, ScreenHeader, Tag, Text,
+  DashedLine, NeoButton, NeoCard, NeoInput, NeoPressable, ScreenHeader, Tag, Text, KeyboardSafeView,
+  useKeyboardVisible,
 } from '../components/neo';
 import {
   createServiceCharge, pollUntilResolved, isValidTzPhone,
@@ -20,8 +21,17 @@ import { createBooking } from '../services/data';
 
 const tzs = (n: number) => `TZS ${n.toLocaleString()}`;
 
+// Official logos, keyed by Config.PAYMENT_NETWORKS ids.
+const NETWORK_LOGOS: Record<string, ImageSourcePropType> = {
+  mpesa: require('../assets/images/networks/mpesa.png'),
+  tigo: require('../assets/images/networks/mixx.png'),
+  airtel: require('../assets/images/networks/airtel.png'),
+  halopesa: require('../assets/images/networks/halopesa.png'),
+};
+
 export default function PaymentScreen() {
   const insets = useSafeAreaInsets();
+  const keyboardOpen = useKeyboardVisible();
   const { user } = useUser();
   const params = useLocalSearchParams<{
     bookingId?: string; hostelId?: string; hostelName?: string;
@@ -128,7 +138,7 @@ export default function PaymentScreen() {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardSafeView style={styles.container}>
       <ScreenHeader title="Pay service fee" modal />
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
@@ -184,7 +194,9 @@ export default function PaymentScreen() {
                 accessibilityLabel={n.label}
                 style={[styles.network, active && styles.networkActive]}
               >
-                <View style={[styles.swatch, { backgroundColor: n.color }]} />
+                <View style={styles.logoTile}>
+                  <Image source={NETWORK_LOGOS[n.id]} style={styles.logo} resizeMode="contain" />
+                </View>
                 <Text style={styles.networkText}>{n.label}</Text>
                 <View style={[styles.radio, active && styles.radioOn]}>
                   {active && <Icon name="checkmark" size={14} color={Colors.yellow} />}
@@ -206,14 +218,14 @@ export default function PaymentScreen() {
         />
       </ScrollView>
 
-      <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 12) + 8 }]}>
+      <View style={[styles.footer, { paddingBottom: keyboardOpen ? 12 : Math.max(insets.bottom, 12) + 8 }]}>
         <View style={styles.footerRow}>
           <Text style={styles.footerLabel}>Total to pay now</Text>
           <Text style={styles.footerAmount}>{tzs(serviceFee)}</Text>
         </View>
         <NeoButton title={`Pay ${tzs(serviceFee)}`} icon="lock-closed" size="lg" haptic="medium" onPress={pay} />
       </View>
-    </KeyboardAvoidingView>
+    </KeyboardSafeView>
   );
 }
 
@@ -247,7 +259,12 @@ const styles = themed(() => StyleSheet.create({
     backgroundColor: Colors.surface, borderRadius: 14, borderWidth: BorderWidth.base, borderColor: Colors.ink,
   },
   networkActive: { backgroundColor: Colors.yellow },
-  swatch: { width: 22, height: 22, borderRadius: 6, borderWidth: BorderWidth.thin, borderColor: Colors.ink },
+  // Brand logos are drawn for a white background, so the tile stays white in dark mode too.
+  logoTile: {
+    width: 76, height: 44, padding: 6, borderRadius: 10, alignItems: 'center', justifyContent: 'center',
+    backgroundColor: '#FFFFFF', borderWidth: BorderWidth.thin, borderColor: Colors.ink,
+  },
+  logo: { width: '100%', height: '100%' },
   networkText: { flex: 1, color: Colors.ink, fontSize: 15, fontWeight: '700' },
   radio: {
     width: 24, height: 24, borderRadius: 12, alignItems: 'center', justifyContent: 'center',
